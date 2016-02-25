@@ -1,0 +1,4 @@
+\select@language {french}
+\contentsline {section}{\numberline {0.1}Mise en place de l'infrastructure}{1}{section.0.1}
+\contentsline {subsection}{\numberline {0.1.1}Acc\IeC {\`e}s ssh \IeC {\`a} la raspberry pi}{1}{subsection.0.1.1}
+\contentsline {subsubsection}{Configuration pour VirtualBox}{1}{section*.2}
