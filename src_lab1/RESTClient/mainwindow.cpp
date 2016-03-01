@@ -15,23 +15,40 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     manager = new QNetworkAccessManager(this);
+    managerAdd = new QNetworkAccessManager(this);
+    managerAll = new QNetworkAccessManager(this);
+    managerRemove = new QNetworkAccessManager(this);
+    managerGet = new QNetworkAccessManager(this);
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(timerNotif()));
     connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(onResult(QNetworkReply *)));
+    connect(managerAdd, SIGNAL(finished(QNetworkReply *)), this, SLOT(onAddNodesResult(QNetworkReply *)));
+    connect(managerRemove, SIGNAL(finished(QNetworkReply *)), this, SLOT(onRemoveNodesResult(QNetworkReply *)));
+    connect(managerGet, SIGNAL(finished(QNetworkReply *)), this, SLOT(onGetNodesResult(QNetworkReply *)));
+    connect(managerAll, SIGNAL(finished(QNetworkReply *)), this, SLOT(onGetAllResult(QNetworkReply *)));
     connect(ui->singleMeasure, SIGNAL (released()), this, SLOT(handleSingleMeasButton()));
     connect(ui->automaticMeasure, SIGNAL (released()), this, SLOT(handleAutomaticMeasButton()));
+    connect(ui->btallMeasure2, SIGNAL (released()), this, SLOT(handleGetAll()));
+    connect(ui->btAddNodes, SIGNAL (released()), this, SLOT(handleAddNode()));
+    connect(ui->btGetNodes, SIGNAL (released()), this, SLOT(handleGetNodes()));
+    connect(ui->btRemoveNodes, SIGNAL (released()), this, SLOT(handleRemoveNode()));
     connect(this, SIGNAL (startMeasure()), this, SLOT(handleMakeMeasure()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete manager;
+    delete managerAdd;
+    delete managerAll;
+    delete managerGet;
+    delete managerRemove;
 }
 
 void MainWindow::onResult(QNetworkReply* reply)
 {
-     QPalette palette;
+    QPalette palette;
     if (reply->error() > 0) {
         qDebug() << reply->error();
         palette = ui->status->palette();
@@ -54,20 +71,105 @@ void MainWindow::onResult(QNetworkReply* reply)
             ui->temperature->setText(QString::number(jsonObject["value"].toDouble())+" [°C]");
             break;
         case 1:
-            ui->singleMeasure->setEnabled(true);
+            ui->luminosity->setText(QString::number(jsonObject["value"].toInt())+" [lux]");
+            break;
+        case 2:
+            ui->motion->setText(jsonObject["value"].toString());
+            break;
+        case 3:
+            ui->battery->setText(QString::number(jsonObject["value"].toInt())+" [%]");
             break;
         default:
             break;
         }
         measureNumber++;
-        if(measureNumber<=1)
+        if(measureNumber<=3)
             emit startMeasure();
+    }
+}
+
+void MainWindow::onAddNodesResult(QNetworkReply *reply)
+{
+    if (reply->error() > 0) {
+        QPalette palette;
+        qDebug() << reply->error();
+        palette = ui->statusAdd3->palette();
+        palette.setColor(ui->statusAdd3->foregroundRole(), Qt::red);
+        ui->statusAdd3->setPalette(palette);
+        ui->statusAdd3->setText("Add nodes error");
+    }
+    else {
+        QString strReply = (QString)reply->readAll();
+        qDebug() << strReply;
+        ui->statusAdd3->setText(strReply);
+    }
+}
+
+void MainWindow::onRemoveNodesResult(QNetworkReply *reply)
+{
+    if (reply->error() > 0) {
+        QPalette palette;
+        qDebug() << reply->error();
+        palette = ui->statusRemove3->palette();
+        palette.setColor(ui->statusRemove3->foregroundRole(), Qt::red);
+        ui->statusRemove3->setPalette(palette);
+        ui->statusRemove3->setText("Remove nodes error");
+    }
+    else {
+        QString strReply = (QString)reply->readAll();
+        qDebug() << strReply;
+        ui->statusRemove3->setText(strReply);
+    }
+}
+
+void MainWindow::onGetNodesResult(QNetworkReply *reply)
+{
+    if (reply->error() > 0) {
+        QPalette palette;
+        qDebug() << reply->error();
+        palette = ui->nodesInfo3->palette();
+        palette.setColor(ui->nodesInfo3->foregroundRole(), Qt::red);
+        ui->nodesInfo3->clear(); // unless you know the editor is empty
+        ui->nodesInfo3->appendPlainText("Error");
+    }
+    else {
+        QString strReply = (QString)reply->readAll();
+        qDebug() << strReply;
+        ui->nodesInfo3->clear(); // unless you know the editor is empty
+        ui->nodesInfo3->appendPlainText(strReply);
+    }
+}
+
+void MainWindow::onGetAllResult(QNetworkReply *reply)
+{
+    QPalette palette;
+    if (reply->error() > 0) {
+        qDebug() << reply->error();
+        palette = ui->status->palette();
+        palette.setColor(ui->status->foregroundRole(), Qt::red);
+        ui->status->setPalette(palette);
+        ui->status->setText("connection error");
+    }
+    else {
+        QString strReply = (QString)reply->readAll();
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+        QJsonObject jsonObject = jsonResponse.object();
+        qDebug() << strReply;
+
+        ui->temperature2->setText(QString::number(jsonObject["temperature"].toDouble())+" [°C]");
+        ui->battery2->setText(QString::number(jsonObject["battery"].toInt())+" [%]");
+        ui->controller2->setText(jsonObject["controller"].toString());
+        ui->humidity2->setText(QString::number(jsonObject["humidity"].toInt())+" [%]");
+        ui->location2->setText(jsonObject["location"].toString());
+        ui->luminosity2->setText(QString::number(jsonObject["luminance"].toInt())+" [lux]");
+        ui->motion2->setText(jsonObject["motion"].toString());
+        ui->sensor2->setText(QString::number(jsonObject["sensor"].toInt()));
+        ui->updateTime2->setText(QString::number(jsonObject["updateTime"].toInt()));
     }
 }
 
 void MainWindow::handleSingleMeasButton()
 {
-    ui->singleMeasure->setEnabled(false);
     measureNumber = 0;
     emit startMeasure();
 }
@@ -88,6 +190,34 @@ void MainWindow::handleAutomaticMeasButton()
     }
 }
 
+void MainWindow::handleGetAll()
+{
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/all_measures"));
+    managerAll->get(request);  // GET
+}
+
+void MainWindow::handleAddNode()
+{
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://192.168.1.2:5000/nodes/add"));
+    managerAdd->get(request);  // GET
+}
+
+void MainWindow::handleRemoveNode()
+{
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://192.168.1.2:5000/nodes/remove"));
+    managerRemove->get(request);  // GET
+}
+
+void MainWindow::handleGetNodes()
+{
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://192.168.1.2:5000/nodes"));
+    managerGet->get(request);  // GET
+}
+
 void MainWindow::handleMakeMeasure()
 {
     QNetworkRequest request;
@@ -98,6 +228,12 @@ void MainWindow::handleMakeMeasure()
         break;
     case 1:
         request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/luminance"));
+        break;
+    case 2:
+        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/motion"));
+        break;
+    case 3:
+        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/battery"));
         break;
     default:
         break;

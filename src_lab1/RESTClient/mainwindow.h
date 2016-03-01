@@ -21,8 +21,16 @@ public:
 
 private slots:
     void onResult(QNetworkReply* reply);
+    void onAddNodesResult(QNetworkReply* reply);
+    void onRemoveNodesResult(QNetworkReply* reply);
+    void onGetNodesResult(QNetworkReply* reply);
+    void onGetAllResult(QNetworkReply* reply);
     void handleSingleMeasButton();
     void handleAutomaticMeasButton();
+    void handleGetAll();
+    void handleAddNode();
+    void handleRemoveNode();
+    void handleGetNodes();
     void handleMakeMeasure();
     void timerNotif();
 signals:
@@ -30,6 +38,10 @@ signals:
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
+    QNetworkAccessManager *managerAdd;
+    QNetworkAccessManager *managerAll;
+    QNetworkAccessManager *managerRemove;
+    QNetworkAccessManager *managerGet;
     QTimer *timer;
     int measureNumber;
 };
