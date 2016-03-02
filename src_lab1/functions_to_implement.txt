@@ -1,0 +1,7 @@
+get_luminance
+get_motion
+get_battery_level
+get_all_measures_sensors
+addNode
+removeNode
+get_nodes
