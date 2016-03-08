@@ -30,4 +30,55 @@ Il est maitenant possible d'accéder à la raspberry pi par ssh:
 	...
 	pi@raspberrypi:~ $ 
 \end{lstlisting}
+\subsection{Connexion du capteur}
+Pour connecter le capteur à la clé Z-wave, il faut suivre les étapes suivantes:
+\begin{enumerate}
+	\item Déconnecter le Z-Stick de la Raspberry
+	\item Presser le bouton du Z-stick, la LED doit clignoter lentement en bleu
+	\item Presser le bouton du capteur
+	\item Quand le capteur est inclu/détecter par le Z-Stick, la LED des deux éléments reste figée (vert pour le capteur, bleu pour la clé) quelques instants
+	\item Le stick peut ensuite être branché à la Raspberry
+\end{enumerate}
+\section{Fonctions à implémenter}
+Nous nous sommes basés sur la documentation de cette adresse pour implémenter les fonctions. \url{https://python-openzwave.googlecode.com/hg-history/c2d93bd3574e73b828dd86da40d80bbed8c25749/docs/_build/html/index.html}
+\subsection{get\_luminance}
+\begin{lstlisting}
 
+\end{lstlisting}
+\subsection{get\_motion}
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{get\_battery\_level}
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{get\_all\_measures\_sensors}
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{addNode}
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{removeNode}
+\begin{lstlisting}
+
+\end{lstlisting}
+\subsection{get\_nodes}
+\begin{lstlisting}
+
+\end{lstlisting}
+\section{REST Client API}
+Même si nous n'avions aucune connaissance préalable du REST (discuté lors du premier cours), nous avons tout de même implémenté le client.\\
+Nous avons choisi d'utiliser QTCreator et créé une petite application en C++.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=17cm]{img/api.png}
+		\caption{Vue par défaut de l'API}
+		\label{api}
+	\end{center}
+\end{figure}
+L'API essaie de communiquer avec le nœud  numéro 3. Nous n'avons implémenter la possibilité de changer le numéro.\\
+La vue de l'application a été séparée en trois parties distinctes. La première va appeler à la suite les différentes méthodes retournant la température, la luminosité, etc... La partie centrale va appeler la fonction \textit{get\_all\_measures\_sensors}, tandis que la dernière partie permet d'ajouter/supprimer et voir les nœuds du réseau.\\
+La première partie possède un champ indiquant si le nœuds répond ou non aux requêtes. Elle contient également un bouton enclenchant le mode automatique, les mesures sont répétées toutes les 10secondes, même si nous avons vu que les valeurs se mettent uniquement à jour chaque 10 minutes.
