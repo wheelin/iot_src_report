@@ -142,7 +142,7 @@ class Backend():
 
 	# executed when discovering the features of a new node 
 
-        print('node Protocol Info: %s.' % node.node_id)which
+        print('node Protocol Info: %s.' % node.node_id)
 
     def _node_update(self, network, node):
 
@@ -310,9 +310,20 @@ class Backend():
 
 
     def allMeasures(self, n):
+	for node in self.network.nodes.itervalues():
+	    if node.node_id == n and node.isReady and n != 1:
+			values = node.get_values("All", "User", "All", True, False)
+			values_list = list(values)
+			elements_list = []
+			for val in values_list:
+				elements_list.append()
+			for val in my_list:
 
-        #### COMPLETE THIS METHOD ##############
-
+			return jsonify( elements_list, 
+							controller = name,
+							sensor = node.node_id,
+							location = node.location,
+							updateTime = self.timestamps["timestamp"+str(node.node_id)])
         return "this method gets all the measures of a specific sensor node"
 
         
@@ -326,7 +337,12 @@ class Backend():
                 for value in values.itervalues():
                     if value.label == "Temperature":
                         val = round(value.data,1)
-                        return jsonify(controller = name, sensor = node.node_id, location = node.location, type = value.label.lower(), updateTime = self.timestamps["timestamp"+str(node.node_id)], value = val)
+                        return jsonify(controller = name, 
+                        	sensor = node.node_id, 
+                        	location = node.location, 
+                        	type = value.label.lower(), 
+                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+                        	value = val)
         return "Node not ready or wrong sensor node !"						
 
     def humidity(self, n):
@@ -339,39 +355,63 @@ class Backend():
                 for value in values.itervalues():
                     if value.label == "Relative Humidity":
                         val = int(value.data)
-                        return jsonify(controller = name, sensor = node.node_id, location = node.location, type = value.label.lower(), updateTime = self.timestamps["timestamp"+str(node.node_id)], value = val)
+                        return jsonify(controller = name, 
+                        	sensor = node.node_id, 
+                        	location = node.location, 
+                        	type = value.label.lower(), 
+                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+                        	value = val)
         return "Node not ready or wrong sensor node !"
 
     def luminance(self, n):
-		for node in self.network.nodes.itervalues():
+	for node in self.network.nodes.itervalues():
             if node.node_id == n and node.isReady and n != 1 :
                 values = node.get_values(0x31, "User", "All", True, False)
                 for value in values.itervalues():
                     if value.label == "Luminance":
                         val = int(value.data)
-                        return jsonify(controller = name, sensor = node.node_id, location = node.location, type = value.label.lower(), updateTime = self.timestamps["timestamp"+str(node.node_id)], value = val)
+                        return jsonify(controller = name, 
+                        	sensor = node.node_id, 
+                        	location = node.location, 
+                        	type = value.label.lower(), 
+                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+                        	value = val)
         return "Node not ready or wrong sensor node !"
 
 
     def motion(self, n):
-		for node in self.network.nodes.itervalues():
+	for node in self.network.nodes.itervalues():
             if node.node_id == n and node.isReady and n != 1 :
-                values = node.get_values(0x31, "User", "All", True, False)
+                values = node.get_values(0x30, "User", "All", True, False)
+		print(values)
                 for value in values.itervalues():
-                    if value.label == "Motion":
-                        val = int(value.data)
-                        return jsonify(controller = name, sensor = node.node_id, location = node.location, type = value.label.lower(), updateTime = self.timestamps["timestamp"+str(node.node_id)], value = val)
+		    print(value)	
+                    if value.label == "Sensor":
+                        val = bool(value.data)
+                        return jsonify(controller = name, 
+                        	sensor = node.node_id, 
+                        	location = node.location, 
+                        	type = value.label.lower(), 
+                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+                        	value = val)
+	    else:
+		print("Node id : {}, node ready : {}, n : {} ".format(node.node_id, node.isReady, n))
         return "Node not ready or wrong sensor node !"
 
 
     def battery(self, n):
-		for node in self.network.nodes.itervalues():
+	for node in self.network.nodes.itervalues():
             if node.node_id == n and node.isReady and n != 1 :
-                values = node.get_values(0x31, "User", "All", True, False)
+                values = node.get_values("All", "User", "All", True, False)
                 for value in values.itervalues():
-                    if value.label == "Battery":
+                    if value.label == "Battery Level":
                         val = int(value.data)
-                        return jsonify(controller = name, sensor = node.node_id, location = node.location, type = value.label.lower(), updateTime = self.timestamps["timestamp"+str(node.node_id)], value = val)
+                        return jsonify(controller = name, 
+                        	sensor = node.node_id, 
+                        	location = node.location, 
+                        	type = value.label.lower(), 
+                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+                        	value = val)
         return "Node not ready or wrong sensor node !"
     
     def get_nodes(self):
