@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->sensorId->setValidator( new QIntValidator(1, 232, this) );
+    ui->sensorId->setText("4");
 
     manager = new QNetworkAccessManager(this);
     managerAdd = new QNetworkAccessManager(this);
@@ -67,14 +69,17 @@ void MainWindow::onResult(QNetworkReply* reply)
             palette = ui->status->palette();
             palette.setColor(ui->status->foregroundRole(), Qt::darkGreen);
             ui->status->setPalette(palette);
-            ui->status->setText("Sensor 3 connected");
+            ui->status->setText("Sensor "+ui->sensorId->text()+" connected");
             ui->temperature->setText(QString::number(jsonObject["value"].toDouble())+" [°C]");
             break;
         case 1:
             ui->luminosity->setText(QString::number(jsonObject["value"].toInt())+" [lux]");
             break;
         case 2:
-            ui->motion->setText(jsonObject["value"].toString());
+            if(jsonObject["value"].toBool())
+                ui->motion->setText("True");
+            else
+                ui->motion->setText("False");
             break;
         case 3:
             ui->battery->setText(QString::number(jsonObject["value"].toInt())+" [%]");
@@ -160,9 +165,16 @@ void MainWindow::onGetAllResult(QNetworkReply *reply)
         ui->battery2->setText(QString::number(jsonObject["battery"].toInt())+" [%]");
         ui->controller2->setText(jsonObject["controller"].toString());
         ui->humidity2->setText(QString::number(jsonObject["humidity"].toInt())+" [%]");
-        ui->location2->setText(jsonObject["location"].toString());
+        QString location = jsonObject["location"].toString();
+        if(location=="")
+            ui->location2->setText("None");
+        else
+            ui->location2->setText(location);
         ui->luminosity2->setText(QString::number(jsonObject["luminance"].toInt())+" [lux]");
-        ui->motion2->setText(jsonObject["motion"].toString());
+        if(jsonObject["motion"].toBool())
+            ui->motion2->setText("True");
+        else
+            ui->motion2->setText("False");
         ui->sensor2->setText(QString::number(jsonObject["sensor"].toInt()));
         ui->updateTime2->setText(QString::number(jsonObject["updateTime"].toInt()));
     }
@@ -193,13 +205,14 @@ void MainWindow::handleAutomaticMeasButton()
 void MainWindow::handleGetAll()
 {
     QNetworkRequest request;
-    request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/all_measures"));
+    request.setUrl(QUrl("http://192.168.1.2:5000/sensors/"+ui->sensorId->text()+"/all_measures"));
     managerAll->get(request);  // GET
 }
 
 void MainWindow::handleAddNode()
 {
     QNetworkRequest request;
+    ui->statusAdd3->setText("Inclusion mode in progress...(20sec)");
     request.setUrl(QUrl("http://192.168.1.2:5000/nodes/add"));
     managerAdd->get(request);  // GET
 }
@@ -207,6 +220,7 @@ void MainWindow::handleAddNode()
 void MainWindow::handleRemoveNode()
 {
     QNetworkRequest request;
+    ui->statusRemove3->setText("Exclusion mode in progress...(20sec)");
     request.setUrl(QUrl("http://192.168.1.2:5000/nodes/remove"));
     managerRemove->get(request);  // GET
 }
@@ -224,16 +238,16 @@ void MainWindow::handleMakeMeasure()
 
     switch(measureNumber){
     case 0:
-        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/temperature"));
+        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/"+ui->sensorId->text()+"/temperature"));
         break;
     case 1:
-        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/luminance"));
+        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/"+ui->sensorId->text()+"/luminance"));
         break;
     case 2:
-        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/motion"));
+        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/"+ui->sensorId->text()+"/motion"));
         break;
     case 3:
-        request.setUrl(QUrl("http://192.168.1.2:5000/sensors/3/battery"));
+        request.setUrl(QUrl("http://192.168.1.2:5000/nodes/"+ui->sensorId->text()+"/battery"));
         break;
     default:
         break;

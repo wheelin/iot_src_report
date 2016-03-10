@@ -286,22 +286,24 @@ class Backend():
 #######################################################################################################################        
 
     def get_sensors(self):
-    	for node in self.network.nodes.itervalues():
-		    if node.node_id == n and node.isReady and n != 1:
 
 		return "this method returns the list of sensors"
 
 
     def addNode(self):
-
-		return "this method passes the controller to inclusion mode and gets it out of it after 20 seconds "
+		self.network.controller.begin_command_add_device()
+		time.sleep(20)
+		self.network.controller.cancel_command()
+		return "Sensor out from 20 sec in inclusion mode"
 
 
 
 
     def removeNode(self):
-
-		return "this method passes the controller to exclusion mode and gets it out of it after 20 seconds "
+		self.network.controller.begin_command_remove_device()
+		time.sleep(20)
+		self.network.controller.cancel_command()
+		return "Sensor out from 20 sec in exclusion mode"
 
 
 
@@ -317,16 +319,16 @@ class Backend():
 				for value in values.itervalues():
 					if value.label == "Temperature":
 						elements_dict["temperature"] = round(value.data,1)
-					if value.label == "Humidity":
+					if value.label == "Relative Humidity":
 						elements_dict["humidity"] = round(value.data,1)
 					if value.label == "Luminance":
 						elements_dict["luminance"] = round(value.data,1)
 					if value.label == "Battery Level":
 						elements_dict["battery"] = round(value.data,1)
-					if value.label == "Sensor"
+					if value.label == "Sensor":
 						elements_dict["motion"] = bool(value.data)
 				return jsonify(elements_dict)
-        return "this method gets all the measures of a specific sensor node"
+        	return "this method gets all the measures of a specific sensor node"
 
         
     def temperature(self, n):
@@ -372,14 +374,14 @@ class Backend():
 	                        	type = value.label.lower(), 
 	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
 	                        	value = val)
-        return "Node not ready or wrong sensor node !"
+        	return "Node not ready or wrong sensor node !"
 
 
     def motion(self, n):
 		for node in self.network.nodes.itervalues():
 	            if node.node_id == n and node.isReady and n != 1 :
 	                values = node.get_values(0x30, "User", "All", True, False)
-					print(values)
+			print(values)
 	                for value in values.itervalues():
 			    print(value)	
 	                    if value.label == "Sensor":
@@ -390,9 +392,7 @@ class Backend():
 	                        	type = value.label.lower(), 
 	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
 	                        	value = val)
-			    else:
-					print("Node id : {}, node ready : {}, n : {} ".format(node.node_id, node.isReady, n))
-        return "Node not ready or wrong sensor node !"
+        	return "Node not ready or wrong sensor node !"
 
 
     def battery(self, n):
@@ -408,13 +408,12 @@ class Backend():
 	                        	type = value.label.lower(), 
 	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
 	                        	value = val)
-        return "Node not ready or wrong sensor node !"
+	        return "Node not ready or wrong sensor node !"
     
     def get_nodes(self):
 
-        #### COMPLETE THIS METHOD ##############
-
-		return "this method returns the list of nodes "
+		return self.network.nodes
+		#return "this method returns the list of nodes "
 
 
     def set_node_location(self, n, value):
