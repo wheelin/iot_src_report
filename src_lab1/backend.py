@@ -287,50 +287,38 @@ class Backend():
 
     def get_sensors(self):
 
-        #### COMPLETE THIS METHOD ##############
-
-	return "this method returns the list of sensors"
+		return "this method returns the list of sensors"
 
 
     def addNode(self):
 
-        #### COMPLETE THIS METHOD ##############
-
-	return "this method passes the controller to inclusion mode and gets it out of it after 20 seconds "
+		return "this method passes the controller to inclusion mode and gets it out of it after 20 seconds "
 
 
 
 
     def removeNode(self):
 
-        #### COMPLETE THIS METHOD ##############
-
-	return "this method passes the controller to exclusion mode and gets it out of it after 20 seconds "
+		return "this method passes the controller to exclusion mode and gets it out of it after 20 seconds "
 
 
 
     def allMeasures(self, n):
-	for node in self.network.nodes.itervalues():
-	    if node.node_id == n and node.isReady and n != 1:
-			values = node.get_values("All", "User", "All", True, False)
-			values_list = list(values)
-			elements_list = []
-			for val in values_list:
-				elements_list.append()
-			for val in my_list:
-
-			return jsonify( elements_list, 
-							controller = name,
-							sensor = node.node_id,
-							location = node.location,
-							updateTime = self.timestamps["timestamp"+str(node.node_id)])
+		for node in self.network.nodes.itervalues():
+		    if node.node_id == n and node.isReady and n != 1:
+				values = node.get_values("All", "User", "All", True, False)
+				elements_list = []
+				for val in values:
+					elements_list.append((val.label.lower(), round(val.data,1)))
+				return jsonify( elements_list, 
+								controller = name,
+								sensor = node.node_id,
+								location = node.location,
+								updateTime = self.timestamps["timestamp"+str(node.node_id)])
         return "this method gets all the measures of a specific sensor node"
 
         
     def temperature(self, n):
-
-        #### HERE'S AN EXAMPLE OF A METHOD THAT GETS THE TEMPERATURE OF A SPECIFIC SENSOR NODE ##############
-        
         for node in self.network.nodes.itervalues():
             if node.node_id == n and node.isReady and n != 1 :
                 values = node.get_values(0x31, "User", "All", True, False)
@@ -345,10 +333,7 @@ class Backend():
                         	value = val)
         return "Node not ready or wrong sensor node !"						
 
-    def humidity(self, n):
-
-         #### HERE'S AN EXAMPLE OF A METHOD THAT GETS THE HUMIDITY OF A SPECIFIC SENSOR NODE ##############
-        
+    def humidity(self, n):        
         for node in self.network.nodes.itervalues():
             if node.node_id == n and node.isReady and n != 1 :
                 values = node.get_values(0x31, "User", "All", True, False)
@@ -364,61 +349,61 @@ class Backend():
         return "Node not ready or wrong sensor node !"
 
     def luminance(self, n):
-	for node in self.network.nodes.itervalues():
-            if node.node_id == n and node.isReady and n != 1 :
-                values = node.get_values(0x31, "User", "All", True, False)
-                for value in values.itervalues():
-                    if value.label == "Luminance":
-                        val = int(value.data)
-                        return jsonify(controller = name, 
-                        	sensor = node.node_id, 
-                        	location = node.location, 
-                        	type = value.label.lower(), 
-                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
-                        	value = val)
+		for node in self.network.nodes.itervalues():
+	            if node.node_id == n and node.isReady and n != 1 :
+	                values = node.get_values(0x31, "User", "All", True, False)
+	                for value in values.itervalues():
+	                    if value.label == "Luminance":
+	                        val = int(value.data)
+	                        return jsonify(controller = name, 
+	                        	sensor = node.node_id, 
+	                        	location = node.location, 
+	                        	type = value.label.lower(), 
+	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+	                        	value = val)
         return "Node not ready or wrong sensor node !"
 
 
     def motion(self, n):
-	for node in self.network.nodes.itervalues():
-            if node.node_id == n and node.isReady and n != 1 :
-                values = node.get_values(0x30, "User", "All", True, False)
-		print(values)
-                for value in values.itervalues():
-		    print(value)	
-                    if value.label == "Sensor":
-                        val = bool(value.data)
-                        return jsonify(controller = name, 
-                        	sensor = node.node_id, 
-                        	location = node.location, 
-                        	type = value.label.lower(), 
-                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
-                        	value = val)
-	    else:
-		print("Node id : {}, node ready : {}, n : {} ".format(node.node_id, node.isReady, n))
+		for node in self.network.nodes.itervalues():
+	            if node.node_id == n and node.isReady and n != 1 :
+	                values = node.get_values(0x30, "User", "All", True, False)
+					print(values)
+	                for value in values.itervalues():
+			    print(value)	
+	                    if value.label == "Sensor":
+	                        val = bool(value.data)
+	                        return jsonify(controller = name, 
+	                        	sensor = node.node_id, 
+	                        	location = node.location, 
+	                        	type = value.label.lower(), 
+	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+	                        	value = val)
+			    else:
+					print("Node id : {}, node ready : {}, n : {} ".format(node.node_id, node.isReady, n))
         return "Node not ready or wrong sensor node !"
 
 
     def battery(self, n):
-	for node in self.network.nodes.itervalues():
-            if node.node_id == n and node.isReady and n != 1 :
-                values = node.get_values("All", "User", "All", True, False)
-                for value in values.itervalues():
-                    if value.label == "Battery Level":
-                        val = int(value.data)
-                        return jsonify(controller = name, 
-                        	sensor = node.node_id, 
-                        	location = node.location, 
-                        	type = value.label.lower(), 
-                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
-                        	value = val)
+		for node in self.network.nodes.itervalues():
+	            if node.node_id == n and node.isReady and n != 1 :
+	                values = node.get_values("All", "User", "All", True, False)
+	                for value in values.itervalues():
+	                    if value.label == "Battery Level":
+	                        val = int(value.data)
+	                        return jsonify(controller = name, 
+	                        	sensor = node.node_id, 
+	                        	location = node.location, 
+	                        	type = value.label.lower(), 
+	                        	updateTime = self.timestamps["timestamp"+str(node.node_id)], 
+	                        	value = val)
         return "Node not ready or wrong sensor node !"
     
     def get_nodes(self):
 
         #### COMPLETE THIS METHOD ##############
 
-	return "this method returns the list of nodes "
+		return "this method returns the list of nodes "
 
 
     def set_node_location(self, n, value):
