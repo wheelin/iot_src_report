@@ -286,6 +286,8 @@ class Backend():
 #######################################################################################################################        
 
     def get_sensors(self):
+    	for node in self.network.nodes.itervalues():
+		    if node.node_id == n and node.isReady and n != 1:
 
 		return "this method returns the list of sensors"
 
@@ -307,14 +309,23 @@ class Backend():
 		for node in self.network.nodes.itervalues():
 		    if node.node_id == n and node.isReady and n != 1:
 				values = node.get_values("All", "User", "All", True, False)
-				elements_list = []
-				for val in values:
-					elements_list.append((val.label.lower(), round(val.data,1)))
-				return jsonify( elements_list, 
-								controller = name,
-								sensor = node.node_id,
-								location = node.location,
-								updateTime = self.timestamps["timestamp"+str(node.node_id)])
+				elements_dict = {}
+				elements_dict["controller"] = name
+				elements_dict["sensor"] = node.node_id
+				elements_dict["location"] = node.location
+				elements_dict["updateTime"] = self.timestamps["timestamp"+str(node.node_id)]
+				for value in values.itervalues():
+					if value.label == "Temperature":
+						elements_dict["temperature"] = round(value.data,1)
+					if value.label == "Humidity":
+						elements_dict["humidity"] = round(value.data,1)
+					if value.label == "Luminance":
+						elements_dict["luminance"] = round(value.data,1)
+					if value.label == "Battery Level":
+						elements_dict["battery"] = round(value.data,1)
+					if value.label == "Sensor"
+						elements_dict["motion"] = bool(value.data)
+				return jsonify(elements_dict)
         return "this method gets all the measures of a specific sensor node"
 
         
