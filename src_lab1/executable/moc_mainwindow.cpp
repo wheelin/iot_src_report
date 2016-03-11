@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[18];
-    char stringdata[262];
+    QByteArrayData data[22];
+    char stringdata[324];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,21 +39,27 @@ QT_MOC_LITERAL(6, 55, 16),
 QT_MOC_LITERAL(7, 72, 19),
 QT_MOC_LITERAL(8, 92, 16),
 QT_MOC_LITERAL(9, 109, 14),
-QT_MOC_LITERAL(10, 124, 22),
-QT_MOC_LITERAL(11, 147, 25),
-QT_MOC_LITERAL(12, 173, 12),
-QT_MOC_LITERAL(13, 186, 13),
-QT_MOC_LITERAL(14, 200, 16),
-QT_MOC_LITERAL(15, 217, 14),
-QT_MOC_LITERAL(16, 232, 17),
-QT_MOC_LITERAL(17, 250, 10)
+QT_MOC_LITERAL(10, 124, 16),
+QT_MOC_LITERAL(11, 141, 15),
+QT_MOC_LITERAL(12, 157, 22),
+QT_MOC_LITERAL(13, 180, 25),
+QT_MOC_LITERAL(14, 206, 12),
+QT_MOC_LITERAL(15, 219, 13),
+QT_MOC_LITERAL(16, 233, 16),
+QT_MOC_LITERAL(17, 250, 14),
+QT_MOC_LITERAL(18, 265, 13),
+QT_MOC_LITERAL(19, 279, 14),
+QT_MOC_LITERAL(20, 294, 17),
+QT_MOC_LITERAL(21, 312, 10)
     },
     "MainWindow\0startMeasure\0\0onResult\0"
     "QNetworkReply*\0reply\0onAddNodesResult\0"
     "onRemoveNodesResult\0onGetNodesResult\0"
-    "onGetAllResult\0handleSingleMeasButton\0"
+    "onGetAllResult\0onStartNetResult\0"
+    "onStopNetResult\0handleSingleMeasButton\0"
     "handleAutomaticMeasButton\0handleGetAll\0"
     "handleAddNode\0handleRemoveNode\0"
+    "handleStartNet\0handleStopNet\0"
     "handleGetNodes\0handleMakeMeasure\0"
     "timerNotif\0"
 };
@@ -65,7 +71,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -73,22 +79,26 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   84,    2, 0x06,
+       1,    0,  104,    2, 0x06,
 
  // slots: name, argc, parameters, tag, flags
-       3,    1,   85,    2, 0x08,
-       6,    1,   88,    2, 0x08,
-       7,    1,   91,    2, 0x08,
-       8,    1,   94,    2, 0x08,
-       9,    1,   97,    2, 0x08,
-      10,    0,  100,    2, 0x08,
-      11,    0,  101,    2, 0x08,
-      12,    0,  102,    2, 0x08,
-      13,    0,  103,    2, 0x08,
-      14,    0,  104,    2, 0x08,
-      15,    0,  105,    2, 0x08,
-      16,    0,  106,    2, 0x08,
-      17,    0,  107,    2, 0x08,
+       3,    1,  105,    2, 0x08,
+       6,    1,  108,    2, 0x08,
+       7,    1,  111,    2, 0x08,
+       8,    1,  114,    2, 0x08,
+       9,    1,  117,    2, 0x08,
+      10,    1,  120,    2, 0x08,
+      11,    1,  123,    2, 0x08,
+      12,    0,  126,    2, 0x08,
+      13,    0,  127,    2, 0x08,
+      14,    0,  128,    2, 0x08,
+      15,    0,  129,    2, 0x08,
+      16,    0,  130,    2, 0x08,
+      17,    0,  131,    2, 0x08,
+      18,    0,  132,    2, 0x08,
+      19,    0,  133,    2, 0x08,
+      20,    0,  134,    2, 0x08,
+      21,    0,  135,    2, 0x08,
 
  // signals: parameters
     QMetaType::Void,
@@ -99,6 +109,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 4,    5,
     QMetaType::Void, 0x80000000 | 4,    5,
     QMetaType::Void, 0x80000000 | 4,    5,
+    QMetaType::Void, 0x80000000 | 4,    5,
+    QMetaType::Void, 0x80000000 | 4,    5,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -122,14 +136,18 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->onRemoveNodesResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         case 4: _t->onGetNodesResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         case 5: _t->onGetAllResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
-        case 6: _t->handleSingleMeasButton(); break;
-        case 7: _t->handleAutomaticMeasButton(); break;
-        case 8: _t->handleGetAll(); break;
-        case 9: _t->handleAddNode(); break;
-        case 10: _t->handleRemoveNode(); break;
-        case 11: _t->handleGetNodes(); break;
-        case 12: _t->handleMakeMeasure(); break;
-        case 13: _t->timerNotif(); break;
+        case 6: _t->onStartNetResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
+        case 7: _t->onStopNetResult((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
+        case 8: _t->handleSingleMeasButton(); break;
+        case 9: _t->handleAutomaticMeasButton(); break;
+        case 10: _t->handleGetAll(); break;
+        case 11: _t->handleAddNode(); break;
+        case 12: _t->handleRemoveNode(); break;
+        case 13: _t->handleStartNet(); break;
+        case 14: _t->handleStopNet(); break;
+        case 15: _t->handleGetNodes(); break;
+        case 16: _t->handleMakeMeasure(); break;
+        case 17: _t->timerNotif(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -164,6 +182,20 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             }
             break;
         case 5:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QNetworkReply* >(); break;
+            }
+            break;
+        case 6:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QNetworkReply* >(); break;
+            }
+            break;
+        case 7:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -208,13 +240,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 18;
     }
     return _id;
 }

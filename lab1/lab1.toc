@@ -4,11 +4,8 @@
 \contentsline {subsubsection}{\numberline {1.1.1}Configuration pour VirtualBox}{3}{subsubsection.1.1.1}
 \contentsline {subsection}{\numberline {1.2}Connexion du capteur}{4}{subsection.1.2}
 \contentsline {section}{\numberline {2}Fonctions \IeC {\`a} impl\IeC {\'e}menter}{5}{section.2}
-\contentsline {subsection}{\numberline {2.1}get\_luminance}{5}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}get\_motion}{5}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}get\_battery\_level}{5}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}get\_all\_measures\_sensors}{5}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}addNode}{5}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}removeNode}{5}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}get\_nodes}{5}{subsection.2.7}
-\contentsline {section}{\numberline {3}REST Client API}{6}{section.3}
+\contentsline {section}{\numberline {3}REST Client API}{5}{section.3}
+\contentsline {subsection}{\numberline {3.1}Lancement de l'application}{5}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Utilisation de l'ex\IeC {\'e}cutable}{5}{subsubsection.3.1.1}
+\contentsline {subsection}{\numberline {3.2}Utilisation du projet QT}{5}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Vues de l'application}{6}{subsection.3.3}
