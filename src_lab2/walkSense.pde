@@ -15,7 +15,7 @@ char MAC[14] = "b0b448c9ba01";
 
 uint8_t attributeData[2] = {0x00};
 
-uint32_t tmp_mag;
+uint64_t tmp_mag;
 uint32_t mag[20] = {0}; 
 uint32_t gesture_intensity;
 
@@ -39,7 +39,7 @@ void setup()
 
 void loop() 
 {
-	int16_t tmp_x, tmp_y, tmp_z;
+	int32_t tmp_x, tmp_y, tmp_z;
 	uint8_t event_counter = 0;
 	uint64_t previous;
 	
@@ -92,17 +92,11 @@ void loop()
             USB.println(tmp_z);
             
 
-            tmp_x = abs(tmp_x); tmp_y = abs(tmp_y); tmp_z = abs(tmp_z);
-            tmp_mag = rnd_sqrt(tmp_x * tmp_x + tmp_y * tmp_y + tmp_z * tmp_z) - ONE_G;
+            tmp_mag = rnd_sqrt((tmp_x * tmp_x) + (tmp_y * tmp_y) + (tmp_z * tmp_z) - (ONE_G * ONE_G));
 
             USB.print("Temporary magnitude = "); USB.println(tmp_mag);
-            USB.println(tmp_x * tmp_x + tmp_y * tmp_y + tmp_z * tmp_z);
             USB.println();
             
-            if(tmp_mag < 0)
-            {
-                tmp_mag = -tmp_mag;
-            }
             mag[event_counter] = tmp_mag;
 
             event_counter++;
