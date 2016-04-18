@@ -15,7 +15,7 @@ char MAC[14] = "b0b448c9ba01";
 
 uint8_t attributeData[2] = {0x00};
 
-uint32_t tmp_mag;
+uint64_t tmp_mag;
 int16_t xValues[NUM_OF_SAMPLES] = {0};
 int16_t yValues[NUM_OF_SAMPLES] = {0};
 int16_t zValues[NUM_OF_SAMPLES] = {0};
@@ -42,7 +42,7 @@ void setup()
 
 void loop() 
 {
-	int16_t tmp_x, tmp_y, tmp_z;
+	int32_t tmp_x, tmp_y, tmp_z;
 	uint8_t event_counter = 0;
 	uint64_t previous;
 	
@@ -94,20 +94,14 @@ void loop()
             USB.print("Z axis acceleration : ");
             USB.println(tmp_z);
             
-            tmp_mag = rnd_sqrt(tmp_x * tmp_x + tmp_y * tmp_y + tmp_z * tmp_z) - ONE_G;
+
+            tmp_mag = rnd_sqrt((tmp_x * tmp_x) + (tmp_y * tmp_y) + (tmp_z * tmp_z) - (ONE_G * ONE_G));
 
             USB.print("Temporary magnitude = "); USB.println(tmp_mag);
-            USB.println(tmp_x * tmp_x + tmp_y * tmp_y + tmp_z * tmp_z);
             USB.println();
-            
-            if(tmp_mag < 0)
-            {
-                tmp_mag = -tmp_mag;
-            }
-			
-	    xValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 1] << 8) + BLE.event[ACC_VAL_OFFSET + 0];
-	    yValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 3] << 8) + BLE.event[ACC_VAL_OFFSET + 2];
-	    zValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 5] << 8) + BLE.event[ACC_VAL_OFFSET + 4];
+            xValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 1] << 8) + BLE.event[ACC_VAL_OFFSET + 0];
+	        yValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 3] << 8) + BLE.event[ACC_VAL_OFFSET + 2];
+	        zValues[event_counter] = (int16_t)(BLE.event[ACC_VAL_OFFSET + 5] << 8) + BLE.event[ACC_VAL_OFFSET + 4];
             mag[event_counter] = tmp_mag;
 
             event_counter++;
@@ -160,10 +154,8 @@ void loop()
 		USB.print("\tz:\t");
 		USB.println(zValues[i]);
     }
-
     USB.println();
     delay(5000);
-    return;
 }
 
 void hangOnFault(const char * msg)
@@ -300,7 +292,6 @@ uint32_t abs(int32_t val)
     else
         return val;
 }
-
 
 
 
